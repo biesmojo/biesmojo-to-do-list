@@ -7,9 +7,19 @@ const deleteAllBtn = document.getElementById("delete-all-btn");
 const currentTime = document.getElementById("current-time");
 const deadlineInput = document.getElementById("deadline-input");
 
+function formatTanggalIndonesia(dateStr) {
+  const bulan = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  ];
+  const [year, month, day] = dateStr.split("-");
+  return `${day} ${bulan[parseInt(month) - 1]} ${year}`;
+}
+
 function updateTime() {
   const now = new Date();
-  currentTime.textContent = `Hari: ${now.toLocaleDateString('id-ID', { weekday: 'long' })}, Tanggal: ${now.toLocaleDateString('id-ID')}`;
+  const tanggal = now.toISOString().split("T")[0];
+  currentTime.textContent = formatTanggalIndonesia(tanggal);
 }
 updateTime();
 
@@ -21,32 +31,36 @@ submitBtn.addEventListener("click", () => {
   if (!taskText) return;
 
   const li = document.createElement("li");
-  li.classList.add(priority);
+  li.classList.add("task-item", priority);
 
-  // container isi tugas
-  const taskContainer = document.createElement("div");
-  taskContainer.style.display = "inline-block";
+  const contentDiv = document.createElement("div");
+  contentDiv.className = "task-content";
 
   const taskSpan = document.createElement("span");
   taskSpan.textContent = taskText;
 
-  if (deadline) {
-    taskSpan.textContent += ` (Deadline: ${deadline})`;
+  const deadlineSpan = document.createElement("div");
+  deadlineSpan.style.marginTop = "4px";
+  deadlineSpan.textContent = deadline ? formatTanggalIndonesia(deadline) : "";
+  contentDiv.appendChild(taskSpan);
+  contentDiv.appendChild(deadlineSpan);
 
+  const rightSide = document.createElement("div");
+  rightSide.style.display = "flex";
+  rightSide.style.alignItems = "center";
+
+  if (deadline) {
     const today = new Date().toISOString().split("T")[0];
     if (deadline < today) {
       const overdueLabel = document.createElement("span");
-      overdueLabel.textContent = " Overdue";
-      overdueLabel.style.color = "red";
-      overdueLabel.style.fontWeight = "bold";
-      overdueLabel.style.marginLeft = "8px";
-      taskSpan.appendChild(overdueLabel);
+      overdueLabel.className = "overdue-label";
+      overdueLabel.textContent = "Overdue";
+      rightSide.appendChild(overdueLabel);
     }
   }
 
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
-  checkbox.style.marginLeft = "12px";
   checkbox.addEventListener("change", function () {
     if (this.checked) {
       li.classList.add("done");
@@ -54,9 +68,10 @@ submitBtn.addEventListener("click", () => {
     }
   });
 
-  taskContainer.appendChild(taskSpan);
-  li.appendChild(taskContainer);
-  li.appendChild(checkbox);
+  rightSide.appendChild(checkbox);
+
+  li.appendChild(contentDiv);
+  li.appendChild(rightSide);
   todoList.appendChild(li);
 
   taskInput.value = "";
