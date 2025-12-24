@@ -23,9 +23,8 @@ submitBtn.addEventListener("click", () => {
 
   const li = document.createElement("li");
   li.classList.add(priority);
-  li.innerHTML = `
-    <span>${taskText} ${deadLine ? "(deadLine: " + deadLine + "}</span>
-    <input type="checkbox" />
+  
+  const span = document.createElement("span"); span.textContent = `${taskText} ${deadLine ? "(Deadline: " + deadLine + ")" : ""
   `;
 
   // cek overdue
