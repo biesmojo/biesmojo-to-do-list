@@ -5,6 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>To-Do List App</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .task-content {
+      flex-grow: 1;
+      text-align: center;
+    }
+    .overdue-label {
+      color: red;
+      font-weight: bold;
+      margin-right: 12px;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -17,7 +34,8 @@
     <textarea id="task-input" placeholder="Tulis tugas di sini..."></textarea>
     <br>
     <p>Set deadline:
-    <input type="date" id="deadline-input"></p>
+      <input type="date" id="deadline-input">
+    </p>
     <select id="priority">
       <option value="low">Low</option>
       <option value="medium">Medium</option>
