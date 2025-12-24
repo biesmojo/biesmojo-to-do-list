@@ -18,8 +18,9 @@ function formatTanggalIndonesia(dateStr) {
 
 function updateTime() {
   const now = new Date();
+  const hari = now.toLocaleDateString('id-ID', { weekday: 'long' });
   const tanggal = now.toISOString().split("T")[0];
-  currentTime.textContent = formatTanggalIndonesia(tanggal);
+  currentTime.textContent = `Hari: ${hari}, Tanggal: ${formatTanggalIndonesia(tanggal)}`;
 }
 updateTime();
 
@@ -39,9 +40,10 @@ submitBtn.addEventListener("click", () => {
   const taskSpan = document.createElement("span");
   taskSpan.textContent = taskText;
 
-  const deadlineSpan = document.createElement("div");
-  deadlineSpan.style.marginTop = "4px";
-  deadlineSpan.textContent = deadline ? formatTanggalIndonesia(deadline) : "";
+  const deadlineSpan = document.createElement("span");
+  deadlineSpan.className = "deadline-text";
+  deadlineSpan.textContent = deadline ? `(Deadline: ${formatTanggalIndonesia(deadline)})` : "";
+
   contentDiv.appendChild(taskSpan);
   contentDiv.appendChild(deadlineSpan);
 
