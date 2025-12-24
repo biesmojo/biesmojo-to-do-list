@@ -5,7 +5,7 @@ const todoList = document.getElementById("todo-list");
 const doneList = document.getElementById("done-list");
 const deleteAllBtn = document.getElementById("delete-all-btn");
 const currentTime = document.getElementById("current-time");
-const deadlineInput = document.getElementById("deadline-input"); // tambahkan ini
+const deadlineInput = document.getElementById("deadline-input");
 
 function updateTime() {
   const now = new Date();
@@ -23,12 +23,15 @@ submitBtn.addEventListener("click", () => {
   const li = document.createElement("li");
   li.classList.add(priority);
 
-  const span = document.createElement("span");
-  span.textContent = taskText;
+  // container isi tugas
+  const taskContainer = document.createElement("div");
+  taskContainer.style.display = "inline-block";
 
-  // tambahkan label deadline jika ada
+  const taskSpan = document.createElement("span");
+  taskSpan.textContent = taskText;
+
   if (deadline) {
-    span.textContent += ` (Deadline: ${deadline})`;
+    taskSpan.textContent += ` (Deadline: ${deadline})`;
 
     const today = new Date().toISOString().split("T")[0];
     if (deadline < today) {
@@ -36,12 +39,14 @@ submitBtn.addEventListener("click", () => {
       overdueLabel.textContent = " Overdue";
       overdueLabel.style.color = "red";
       overdueLabel.style.fontWeight = "bold";
-      span.appendChild(overdueLabel);
+      overdueLabel.style.marginLeft = "8px";
+      taskSpan.appendChild(overdueLabel);
     }
   }
 
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
+  checkbox.style.marginLeft = "12px";
   checkbox.addEventListener("change", function () {
     if (this.checked) {
       li.classList.add("done");
@@ -49,7 +54,8 @@ submitBtn.addEventListener("click", () => {
     }
   });
 
-  li.appendChild(span);
+  taskContainer.appendChild(taskSpan);
+  li.appendChild(taskContainer);
   li.appendChild(checkbox);
   todoList.appendChild(li);
 
