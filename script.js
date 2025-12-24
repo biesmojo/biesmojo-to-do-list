@@ -47,9 +47,8 @@ submitBtn.addEventListener("click", () => {
   contentDiv.appendChild(taskSpan);
   contentDiv.appendChild(deadlineSpan);
 
-  const rightSide = document.createElement("div");
-  rightSide.style.display = "flex";
-  rightSide.style.alignItems = "center";
+  const actionsDiv = document.createElement("div");
+  actionsDiv.className = "task-actions";
 
   if (deadline) {
     const today = new Date().toISOString().split("T")[0];
@@ -57,9 +56,15 @@ submitBtn.addEventListener("click", () => {
       const overdueLabel = document.createElement("span");
       overdueLabel.className = "overdue-label";
       overdueLabel.textContent = "Overdue";
-      rightSide.appendChild(overdueLabel);
+      actionsDiv.appendChild(overdueLabel);
     }
   }
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Delete";
+  deleteBtn.addEventListener("click", () => {
+    li.remove();
+  });
 
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
@@ -70,10 +75,11 @@ submitBtn.addEventListener("click", () => {
     }
   });
 
-  rightSide.appendChild(checkbox);
+  actionsDiv.appendChild(deleteBtn);
+  actionsDiv.appendChild(checkbox);
 
   li.appendChild(contentDiv);
-  li.appendChild(rightSide);
+  li.appendChild(actionsDiv);
   todoList.appendChild(li);
 
   taskInput.value = "";
