@@ -1,6 +1,7 @@
 const taskInput = document.getElementById("task-input");
 const prioritySelect = document.getElementById("priority");
 const submitBtn = document.getElementById("submit-btn");
+const overdueTodoList = document.getElementById("overdue-todo-list");
 const todoList = document.getElementById("todo-list");
 const doneList = document.getElementById("done-list");
 const deleteAllBtn = document.getElementById("delete-all-btn");
@@ -34,6 +35,9 @@ submitBtn.addEventListener("click", () => {
   const li = document.createElement("li");
   li.classList.add("task-item", priority);
 
+  // Simpan deadline sebagai atribut data untuk referensi nanti (opsional)
+  if (deadline) li.dataset.deadline = deadline; // REVISI: menyimpan deadline
+
   const contentDiv = document.createElement("div");
   contentDiv.className = "task-content";
 
@@ -50,13 +54,17 @@ submitBtn.addEventListener("click", () => {
   const actionsDiv = document.createElement("div");
   actionsDiv.className = "task-actions";
 
+  let isOverdue = false; // REVISI: flag untuk menandai overdue
+
   if (deadline) {
     const today = new Date().toISOString().split("T")[0];
     if (deadline < today) {
+      isOverdue = true; // REVISI: set flag overdue
       const overdueLabel = document.createElement("span");
       overdueLabel.className = "overdue-label";
       overdueLabel.textContent = "Overdue";
       actionsDiv.appendChild(overdueLabel);
+      li.classList.add("overdue"); // REVISI: tambahkan kelas visual jika perlu
     }
   }
 
@@ -80,13 +88,20 @@ submitBtn.addEventListener("click", () => {
 
   li.appendChild(contentDiv);
   li.appendChild(actionsDiv);
-  todoList.appendChild(li);
+
+  // REVISI: jika overdue, tambahkan ke overdueTodoList; jika tidak, ke todoList
+  if (isOverdue) {
+    overdueTodoList.appendChild(li); // REVISI
+  } else {
+    todoList.appendChild(li);
+  }
 
   taskInput.value = "";
   deadlineInput.value = "";
 });
 
 deleteAllBtn.addEventListener("click", () => {
+  overdueTodoList.innerHTML = "";
   todoList.innerHTML = "";
   doneList.innerHTML = "";
 });
